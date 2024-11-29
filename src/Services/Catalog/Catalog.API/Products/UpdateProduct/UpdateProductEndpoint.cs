@@ -1,16 +1,16 @@
 ﻿namespace Catalog.API.Products.UpdateProduct;
 
-public record UpdateProductRequest(string Name, List<string> Category, string Description, string ImageFile, decimal Price);
-public record UpdateProductResponse(Guid Id);
+public record UpdateProductRequest(Guid Id, string Name, List<string> Category, string Description, string ImageFile, decimal Price);
+public record UpdateProductResponse(bool IsSuccess);
 
 public class UpdateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPut("/products/{id}",
+        app.MapPut("/products",
             async (UpdateProductRequest request, ISender sender) =>
         {
-            var command = request.Adapt<UpdateProductResponse>();
+            var command = request.Adapt<UpdateProductCommand>();
 
             var result = await sender.Send(command);
 
@@ -20,6 +20,7 @@ public class UpdateProductEndpoint : ICarterModule
             .WithName("UpdateProduct")
             .Produces<UpdateProductResponse>(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Update Product")
             .WithDescription("Update Product");
 

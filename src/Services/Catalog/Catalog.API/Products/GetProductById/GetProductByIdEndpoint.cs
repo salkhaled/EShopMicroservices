@@ -1,7 +1,7 @@
 ﻿
 namespace Catalog.API.Products.GetProducts;
 
-// public record GetProductByIdRequest();
+// public record UpdateProductRequest();
 public record GetProductByIdResponse(Product Product);
 
 public class GetProductByIdEndpoint : ICarterModule
@@ -20,6 +20,7 @@ public class GetProductByIdEndpoint : ICarterModule
             .WithName("GetProductById")
             .Produces<GetProductsResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Get Product By Id")
             .WithDescription("Get Product By Id");
     }
