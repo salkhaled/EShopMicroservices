@@ -1,31 +1,37 @@
-using System.Data.Common;
-using BuildingsBlocks.Behaviors;
-using FluentValidation;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-var assembly = typeof(Program).Assembly;
-builder.Services.AddMediatR(config =>
+internal class Program
 {
-    config.RegisterServicesFromAssembly(assembly);
-    config.AddOpenBehavior(typeof(ValidationBehavior<,>));
-});
-builder.Services.AddValidatorsFromAssembly(assembly);
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCarter();
+        // Add services to the container.
+        var assembly = typeof(Program).Assembly;
+        builder.Services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(assembly);
+            config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+        });
+        builder.Services.AddValidatorsFromAssembly(assembly);
 
-builder.Services.AddMarten(config =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("Database");
-    ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+        builder.Services.AddCarter();
 
-    config.Connection(connectionString);
-});
+        builder.Services.AddMarten(config =>
+        {
+            var connectionString = builder.Configuration.GetConnectionString("Database");
+            ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
-var app = builder.Build();
+            config.Connection(connectionString);
+        });
 
-// Configure the HTTP request pipeline.
-app.MapCarter();
+        builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
-app.Run();
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        app.MapCarter();
+
+        app.UseExceptionHandler(options => { });
+
+        app.Run();
+    }
+}

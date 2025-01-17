@@ -33,7 +33,7 @@ internal class UpdateProductCommandHandler
         logger.LogInformation("UpdateProductHandler.Handle called with {@command}", command);
 
         // Update Product entity from command object
-        Product product = await session.LoadAsync<Product>(command.Id, cancellationToken) ?? throw new ProductNotFoundException();
+        Product product = await session.LoadAsync<Product>(command.Id, cancellationToken) ?? throw new ProductNotFoundException(Id: command.Id);
 
         product.Name = command.Name;
         product.Category = product.Category;
