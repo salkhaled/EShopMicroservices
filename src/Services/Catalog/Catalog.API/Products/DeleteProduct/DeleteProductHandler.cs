@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Catalog.API.Products.DeleteProduct;
+﻿namespace Catalog.API.Products.DeleteProduct;
 
 public record DeleteProductCommand(Guid Id) 
     : ICommand<DeleteProductResult>;
@@ -15,13 +13,11 @@ public class DeleteProductCommandValidator : AbstractValidator<DeleteProductComm
 }
 
 internal class DeleteProductCommandHandler
-    (IDocumentSession session, ILogger<DeleteProductCommandHandler> logger) 
+    (IDocumentSession session) 
     : ICommandHandler<DeleteProductCommand, DeleteProductResult>
 {
     public async Task<DeleteProductResult> Handle(DeleteProductCommand command, CancellationToken cancellationToken)
     {
-        logger.LogInformation("DeleteProductHandler.Handle called with {@command}", command);
-         
         session.Delete<Product>(command.Id);
         await session.SaveChangesAsync(cancellationToken);
 
