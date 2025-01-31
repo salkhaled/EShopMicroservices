@@ -1,3 +1,5 @@
+using Microsoft.Extensions.DependencyInjection;
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -16,11 +18,11 @@ internal class Program
 
         builder.Services.AddCarter();
 
+        var connectionString = builder.Configuration.GetConnectionString("Database");
+        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+
         builder.Services.AddMarten(config =>
         {
-            var connectionString = builder.Configuration.GetConnectionString("Database");
-            ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
-
             config.Connection(connectionString);
         }).UseLightweightSessions();
 
@@ -29,6 +31,9 @@ internal class Program
 
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+        builder.Services.AddHealthChecks()
+            .AddNpgSql(connectionString);
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -36,6 +41,8 @@ internal class Program
 
         app.UseExceptionHandler(options => { });
 
+        app.UseHealthChecks("/health");
+
         app.Run();
     }
-}
+} 
