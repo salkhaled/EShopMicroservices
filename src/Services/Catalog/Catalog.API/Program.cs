@@ -22,7 +22,10 @@ internal class Program
             ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
             config.Connection(connectionString);
-        });
+        }).UseLightweightSessions();
+
+        if (builder.Environment.IsDevelopment())
+            builder.Services.InitializeMartenWith<CatalogInitialData>();
 
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
