@@ -1,3 +1,5 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 
 internal class Program
@@ -41,7 +43,10 @@ internal class Program
 
         app.UseExceptionHandler(options => { });
 
-        app.UseHealthChecks("/health");
+        app.UseHealthChecks("/health", 
+            new HealthCheckOptions { 
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
 
         app.Run();
     }
