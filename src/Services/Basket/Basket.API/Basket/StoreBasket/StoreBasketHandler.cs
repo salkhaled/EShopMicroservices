@@ -3,7 +3,7 @@ namespace Basket.API.Basket.StoreBasket;
 
 
 public record StoreBasketCommand(ShoppingCart Cart) : ICommand<StoreBasketResult>;
-public record StoreBasketResult(bool isSuccess);
+public record StoreBasketResult(string UserName);
 
 public class StoreBasketCommandValidator : AbstractValidator<StoreBasketCommand>
 {
@@ -19,6 +19,6 @@ internal sealed class StoreBasketCommandHandler : ICommandHandler<StoreBasketCom
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
 
-        return new StoreBasketResult(true);
+        return new StoreBasketResult(string.Empty);
     }
 }

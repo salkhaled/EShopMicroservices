@@ -13,9 +13,7 @@ internal class GetBasketQueryHandler
         // TODO:
         //var basket = await _repository.GetBasket(query.UserName);
 
-        //var product = await session.LoadAsync<ShoppingCart>(query.UserName, cancellationToken);
-        //        return product == null ? throw new BasketNotFoundException(UserName: query.UserName)
-        //    : new GetBasketResult(product);
+
 
         return new GetBasketResult(new ShoppingCart(query.UserName));
     }
