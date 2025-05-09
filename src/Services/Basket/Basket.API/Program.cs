@@ -16,9 +16,15 @@ builder.Services.AddMarten(opts =>
 })
     .UseLightweightSessions();
 
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.MapCarter();
+
+app.UseExceptionHandler(options => { });
 
 app.Run();
