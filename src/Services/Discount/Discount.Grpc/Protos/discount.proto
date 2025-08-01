@@ -36,7 +36,6 @@ message UpdateDiscountRequest {
 
 
 message DeleteDiscountRequest {
-  string productName= 1;
 }
 
 

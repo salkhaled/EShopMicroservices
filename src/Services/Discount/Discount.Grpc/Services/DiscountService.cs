@@ -22,10 +22,10 @@ public class DiscountService
 
         return coupon.Adapt<CouponModel>();
 
-    }
+        }
 
     public override async Task<CouponModel> UpdatetDiscount(UpdateDiscountRequest request, ServerCallContext context)
-    {
+        {
         var coupon = request.Coupon.Adapt<Coupon>();
         if (coupon == null)
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid request"));
@@ -37,10 +37,10 @@ public class DiscountService
 
         return coupon.Adapt<CouponModel>();
 
-    }
+        }
 
     public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
-    {
+        {
         var coupon = await dbContext
             .Coupons
             .FirstOrDefaultAsync(c => c.ProductName.Equals(request.ProductName));
@@ -51,10 +51,10 @@ public class DiscountService
         await dbContext.SaveChangesAsync();
 
         return new DeleteDiscountResponse { Success = true };
-    }
+        }
 
     public async override Task<CouponModel> GetDiscount(GetDiscountRequest request, ServerCallContext context)
-    {
+        {
         var coupon = await dbContext
             .Coupons.FirstOrDefaultAsync(c => c.ProductName == request.ProductName);
 
