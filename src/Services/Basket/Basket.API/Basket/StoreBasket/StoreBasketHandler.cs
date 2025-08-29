@@ -15,12 +15,13 @@ public class StoreBasketCommandValidator : AbstractValidator<StoreBasketCommand>
     }
 }
 
-internal sealed class StoreBasketCommandHandler (IBasketRepository respository, DiscountProtoService.DiscountProtoServiceClient discountProtoServiceClient): ICommandHandler<StoreBasketCommand, StoreBasketResult>
+internal sealed class StoreBasketCommandHandler 
+    (IBasketRepository respository, DiscountProtoService.DiscountProtoServiceClient discountProtoServiceClient)
+    : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
-        await DebuctDiscount(command.Cart, cancellationToken)
-            .ConfigureAwait(false);
+        await DebuctDiscount(command.Cart, cancellationToken);
 
         await respository.StoreBasket(command.Cart, cancellationToken);
 
